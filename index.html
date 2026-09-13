@@ -1,645 +1,731 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Muh. Fachri Akbar — Claude Campus Ambassador Portfolio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --paper: #EDF1F5;
-    --paper-line: #C9D6E4;
-    --ink: #10151C;
-    --blue-deep: #16294A;
-    --blue-line: #3E6FA8;
-    --accent: #E1531F;
-    --steel: #57677A;
+<!-- Menggabungkan Font Serif (Editorial/Claude vibe) dan Mono (Tech/Blueprint vibe) -->
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          paper: '#F9F8F6', // Warm off-white (Claude aesthetic)
+          ink: '#2D2B2A',
+          accent: '#DA5D35', // Terracotta/Peach (Claude accent)
+          blueprint: '#4A6984',
+          blueprint_line: '#D2DCE6',
+          steel: '#6B7280',
+          dark_bg: '#1C2329' // For the dark section
+        },
+        fontFamily: {
+          serif: ['Fraunces', 'serif'],
+          sans: ['Inter', 'sans-serif'],
+          mono: ['IBM Plex Mono', 'monospace'],
+        },
+        animation: {
+          'spin-slow': 'spin 40s linear infinite',
+          'pulse-ring': 'pulseRing 2.6s ease-out infinite',
+          'grid-drift': 'gridDrift 22s ease-in-out infinite',
+        },
+        keyframes: {
+          pulseRing: {
+            '0%': { boxShadow: '0 0 0 0 rgba(218, 93, 53, 0.45)' },
+            '70%': { boxShadow: '0 0 0 8px rgba(218, 93, 53, 0)' },
+            '100%': { boxShadow: '0 0 0 0 rgba(218, 93, 53, 0)' },
+          },
+          gridDrift: {
+            '0%, 100%': { backgroundPosition: '-1px -1px' },
+            '50%': { backgroundPosition: '15px 11px' },
+          },
+          spin: {
+            'from': { transform: 'rotate(0deg)' },
+            'to': { transform: 'rotate(360deg)' },
+          }
+        }
+      }
+    }
   }
+</script>
 
-  *{ box-sizing: border-box; }
-  html{ scroll-behavior: smooth; }
-
-  body{
-    margin:0;
-    background: var(--paper);
-    color: var(--ink);
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 16px;
-    line-height: 1.65;
-  }
-
-  h1, h2, h3, .display{
-    font-family: 'Space Grotesk', sans-serif;
-    font-weight: 600;
-    letter-spacing: -0.01em;
-    margin: 0;
-  }
-
-  .mono{
-    font-family: 'IBM Plex Mono', monospace;
-  }
-
-  a{ color: inherit; }
-
-  ::selection{ background: var(--accent); color: var(--paper); }
-
-  @media (prefers-reduced-motion: reduce){
-    *{ animation: none !important; transition: none !important; }
-  }
-
-  /* ---------- blueprint grid background ---------- */
-  .grid-bg{
+<style type="text/tailwindcss">
+  /* Custom blueprint grid backgrounds */
+  .grid-bg {
     background-image:
-      linear-gradient(var(--paper-line) 1px, transparent 1px),
-      linear-gradient(90deg, var(--paper-line) 1px, transparent 1px);
+      linear-gradient(var(--tw-colors-blueprint_line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--tw-colors-blueprint_line) 1px, transparent 1px);
     background-size: 32px 32px;
-    background-position: -1px -1px;
   }
-
-  .grid-bg-dark{
-    background-color: var(--blue-deep);
+  .grid-bg-dark {
+    background-color: theme('colors.dark_bg');
     background-image:
       linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
       linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px);
     background-size: 32px 32px;
-    background-position: -1px -1px;
-    color: var(--paper);
+    color: theme('colors.paper');
   }
 
-  /* ---------- sheet frame (drafting sheet corners) ---------- */
-  .sheet{
-    position: relative;
-    max-width: 1040px;
-    margin: 0 auto;
-    padding: 88px 28px;
-    border-left: 1px solid var(--paper-line);
-    border-right: 1px solid var(--paper-line);
+  /* Sheet corner markers (Drafting paper effect) */
+  .sheet-corners::before, .sheet-corners::after {
+    content: "";
+    position: absolute;
+    width: 14px; height: 14px;
+    top: 0px;
+    border-top: 2px solid theme('colors.blueprint');
+  }
+  .sheet-corners::before { left: 0px; border-left: 2px solid theme('colors.blueprint'); }
+  .sheet-corners::after { right: 0px; border-right: 2px solid theme('colors.blueprint'); }
+
+  /* Compass Mark Animation */
+  .compass-mark {
+    position: absolute;
+    top: 24px;
+    right: 28px;
+    width: 60px;
+    height: 60px;
+    opacity: 0.15;
+    z-index: 0;
+    pointer-events: none;
+    animation: spin 40s linear infinite;
   }
 
-  .grid-bg-dark .sheet{
-    border-left: 1px solid rgba(255,255,255,0.14);
-    border-right: 1px solid rgba(255,255,255,0.14);
+  /* Scroll Reveal Utilities */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.8s cubic-bezier(.2,.7,.3,1), transform 0.8s cubic-bezier(.2,.7,.3,1);
+  }
+  .reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
   }
 
-  .sheet::before, .sheet::after{
-    content:"";
-    position:absolute;
-    width:14px; height:14px;
-    top:24px;
-    border-top: 2px solid var(--blue-line);
-  }
-  .sheet::before{ left:24px; border-left: 2px solid var(--blue-line); }
-  .sheet::after{ right:24px; border-right: 2px solid var(--blue-line); }
+  /* Timeline dot animation delay */
+  .tl-item:nth-child(2) .tl-dot { animation-delay: 0.4s; }
+  .tl-item:nth-child(3) .tl-dot { animation-delay: 0.8s; }
+  .tl-item:nth-child(4) .tl-dot { animation-delay: 1.2s; }
+  .tl-item:nth-child(5) .tl-dot { animation-delay: 1.6s; }
 
-  .sheet-tag{
-    display:flex;
-    justify-content: space-between;
-    align-items: baseline;
-    font-family:'IBM Plex Mono', monospace;
-    font-size: 12px;
-    color: var(--steel);
-    margin-bottom: 56px;
-    letter-spacing: 0.02em;
+  /* Crosshair specific styling */
+  #hero-section { cursor: crosshair; }
+  .hero-crosshair::before, .hero-crosshair::after {
+    content:""; position:absolute; background: theme('colors.accent');
   }
-  .grid-bg-dark .sheet-tag{ color: rgba(237,241,245,0.6); }
+  .hero-crosshair::before { width: 17px; height: 1px; left: -8px; top: 0; }
+  .hero-crosshair::after { width: 1px; height: 17px; left: 0; top: -8px; }
 
-  .sheet-tag span.accent-dot{
-    color: var(--accent);
+  /* Animasi Mini Slider per Kotak Galeri */
+  @keyframes miniSlide {
+    0%, 25% { transform: translateX(0%); }
+    33%, 58% { transform: translateX(-33.3333%); }
+    66%, 91% { transform: translateX(-66.6666%); }
+    100% { transform: translateX(0%); }
   }
-
-  /* ---------- nav ---------- */
-  nav{
-    position: sticky; top:0; z-index: 50;
-    background: rgba(237,241,245,0.92);
-    backdrop-filter: blur(6px);
-    border-bottom: 1px solid var(--paper-line);
+  .mini-slider-track {
+    width: 300%;
+    height: 100%;
+    display: flex;
+    animation: miniSlide 12s cubic-bezier(0.4, 0, 0.2, 1) infinite;
   }
-  .nav-inner{
-    max-width: 1040px; margin:0 auto;
-    padding: 16px 28px;
-    display:flex; align-items:center; justify-content: space-between;
+  .mini-slider-item {
+    width: 33.3333%;
+    height: 100%;
+    object-fit: cover;
   }
-  .nav-mark{
-    font-family:'Space Grotesk', sans-serif;
-    font-weight:700; font-size: 17px;
-  }
-  .nav-links{
-    display:none;
-    gap: 28px;
-    font-family:'IBM Plex Mono', monospace;
-    font-size: 13px;
-  }
-  .nav-links a{ text-decoration:none; color: var(--steel); }
-  .nav-links a:hover{ color: var(--ink); }
-  @media (min-width: 760px){ .nav-links{ display:flex; } }
-
-  /* ---------- hero ---------- */
-  .hero-title{
-    font-size: clamp(2.4rem, 6vw, 4.4rem);
-    line-height: 1.05;
-    max-width: 14ch;
-  }
-  .hero-sub{
-    margin-top: 28px;
-    max-width: 56ch;
-    font-size: 1.05rem;
-    color: #2b3441;
-  }
-  .hero-meta{
-    margin-top: 40px;
-    display:flex; flex-wrap:wrap; gap: 10px 28px;
-    font-family:'IBM Plex Mono', monospace;
-    font-size: 13px;
-    color: var(--steel);
-  }
-  .hero-meta span{ white-space: nowrap; }
-
-  .cta-row{ margin-top: 48px; display:flex; flex-wrap:wrap; gap:16px; }
-  .btn{
-    display:inline-block;
-    padding: 14px 26px;
-    font-family:'IBM Plex Mono', monospace;
-    font-size: 13px;
-    text-decoration:none;
-    border: 1.5px solid var(--ink);
-    transition: background 0.15s ease, color 0.15s ease;
-  }
-  .btn-solid{ background: var(--ink); color: var(--paper); }
-  .btn-solid:hover{ background: var(--accent); border-color: var(--accent); }
-  .btn-line:hover{ background: var(--ink); color: var(--paper); }
-
-  /* ---------- section heads ---------- */
-  .sec-head{
-    display:flex; align-items:flex-end; gap:18px;
-    margin-bottom: 40px;
-    border-bottom: 1px solid var(--paper-line);
-    padding-bottom: 18px;
-  }
-  .grid-bg-dark .sec-head{ border-bottom: 1px solid rgba(255,255,255,0.16); }
-  .sec-num{
-    font-family:'IBM Plex Mono', monospace;
-    font-size: 13px;
-    color: var(--accent);
-  }
-  .sec-head h2{ font-size: clamp(1.5rem, 3.2vw, 2.1rem); }
-
-  /* ---------- about ---------- */
-  .about-grid{
-    display:grid; grid-template-columns: 1fr; gap: 40px;
-  }
-  @media (min-width: 760px){
-    .about-grid{ grid-template-columns: 1.3fr 1fr; }
-  }
-  .about-copy p{ max-width: 62ch; margin: 0 0 18px; }
-  .about-copy p:last-child{ margin-bottom:0; }
-
-  .fact-strip{
-    border-top: 1px solid var(--paper-line);
-    display:grid; grid-template-columns: 1fr;
-    font-family:'IBM Plex Mono', monospace;
-    font-size: 13px;
-  }
-  .fact-row{
-    display:flex; justify-content: space-between; gap: 12px;
-    padding: 14px 0;
-    border-bottom: 1px solid var(--paper-line);
-  }
-  .fact-row .k{ color: var(--steel); }
-  .fact-row .v{ text-align:right; }
-
-  /* ---------- timeline ---------- */
-  .timeline{ position: relative; }
-  .timeline::before{
-    content:"";
-    position:absolute; left:9px; top:6px; bottom:6px;
-    width:1px; background: var(--paper-line);
-  }
-  .grid-bg-dark .timeline::before{ background: rgba(255,255,255,0.2); }
-
-  .tl-item{
-    position: relative;
-    padding: 0 0 44px 40px;
-  }
-  .tl-item:last-child{ padding-bottom: 0; }
-  .tl-item::before{
-    content:"";
-    position:absolute; left:4px; top:6px;
-    width:11px; height:11px;
-    background: var(--paper);
-    border: 2px solid var(--blue-line);
-    border-radius: 50%;
-  }
-  .grid-bg-dark .tl-item::before{ background: var(--blue-deep); }
-
-  .tl-date{
-    font-family:'IBM Plex Mono', monospace;
-    font-size: 12.5px;
-    color: var(--accent);
-    display:block;
-    margin-bottom: 6px;
-  }
-  .tl-role{ font-size: 1.15rem; font-weight: 600; margin-bottom: 2px; }
-  .tl-org{ color: var(--steel); font-size: 0.95rem; margin-bottom: 12px; }
-  .tl-item ul{ margin: 0; padding-left: 18px; max-width: 66ch; }
-  .tl-item li{ margin-bottom: 8px; }
-  .tl-item li:last-child{ margin-bottom: 0; }
-
-  .earlier-box{
-    margin-top: 44px;
-    padding: 24px;
-    border: 1px solid var(--paper-line);
-  }
-  .earlier-box h3{
-    font-size: 1rem;
-    font-family:'IBM Plex Mono', monospace;
-    font-weight: 500;
-    margin-bottom: 16px;
-    color: var(--steel);
-  }
-  .earlier-box ul{ margin:0; padding-left: 18px; }
-  .earlier-box li{ margin-bottom: 10px; }
-  .earlier-box li:last-child{ margin-bottom: 0; }
-
-  /* ---------- stats ---------- */
-  .stat-grid{
-    display:grid; grid-template-columns: repeat(2, 1fr); gap: 1px;
-    background: var(--paper-line);
-    border: 1px solid var(--paper-line);
-  }
-  @media (min-width: 700px){ .stat-grid{ grid-template-columns: repeat(4, 1fr); } }
-  .stat-cell{
-    background: var(--paper);
-    padding: 28px 20px;
-  }
-  .stat-num{
-    font-family:'Space Grotesk', sans-serif;
-    font-weight:700;
-    font-size: clamp(1.6rem, 3.4vw, 2.3rem);
-    color: var(--blue-deep);
-  }
-  .stat-label{
-    margin-top: 6px;
-    font-size: 13px;
-    color: var(--steel);
-    max-width: 22ch;
+  .group:hover .mini-slider-track {
+    animation-play-state: paused;
   }
 
-  .cert-list{
-    margin-top: 44px;
-    display:grid; grid-template-columns: 1fr; gap: 12px;
-  }
-  @media (min-width: 700px){ .cert-list{ grid-template-columns: 1fr 1fr; } }
-  .cert-item{
-    display:flex; gap: 12px;
-    font-size: 14px;
-    padding: 14px 0;
-    border-bottom: 1px solid var(--paper-line);
-  }
-  .cert-item .yr{ font-family:'IBM Plex Mono', monospace; color: var(--accent); flex-shrink:0; }
-
-  /* ---------- why ambassador ---------- */
-  .why-wrap{ display:grid; grid-template-columns: 1fr; gap: 44px; }
-  @media (min-width: 800px){ .why-wrap{ grid-template-columns: 1.1fr 0.9fr; } }
-  .why-copy p{ max-width: 60ch; margin: 0 0 18px; }
-  .why-copy p:last-child{ margin-bottom: 0; }
-
-  .why-list{ list-style:none; margin:0; padding:0; }
-  .why-list li{
-    padding: 18px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.16);
-    display:flex; gap: 16px;
-  }
-  .why-list li:first-child{ border-top: 1px solid rgba(255,255,255,0.16); }
-  .why-list .tag{
-    font-family:'IBM Plex Mono', monospace;
-    font-size: 12px;
-    color: var(--accent);
-    flex-shrink:0;
-    width: 74px;
-  }
-
-  /* ---------- contact ---------- */
-  .contact-grid{
-    display:grid; grid-template-columns: 1fr; gap: 22px;
-  }
-  @media (min-width: 700px){ .contact-grid{ grid-template-columns: repeat(2, 1fr); } }
-  .contact-card{
-    border: 1px solid var(--paper-line);
-    padding: 22px;
-    display:flex; align-items:center; gap: 16px;
-    text-decoration:none;
-    color: var(--ink);
-    transition: border-color 0.15s ease;
-  }
-  .contact-card:hover{ border-color: var(--accent); }
-  .contact-card svg{ flex-shrink:0; width: 22px; height:22px; color: var(--blue-line); }
-  .contact-card .cc-label{ font-size: 12px; color: var(--steel); font-family:'IBM Plex Mono', monospace; }
-  .contact-card .cc-value{ font-size: 15px; font-weight: 500; margin-top:2px; word-break: break-word; }
-
-  footer{
-    text-align:center;
-    padding: 32px 20px;
-    font-family:'IBM Plex Mono', monospace;
-    font-size: 12px;
-    color: var(--steel);
-  }
+  /* Smooth text selection */
+  ::selection { background: theme('colors.accent'); color: theme('colors.paper'); }
 </style>
 </head>
-<body>
+<body class="bg-paper text-ink font-sans text-base leading-relaxed antialiased overflow-x-hidden">
 
-<nav>
-  <div class="nav-inner">
-    <div class="nav-mark">FACHRI AKBAR</div>
-    <div class="nav-links">
-      <a href="#about">About</a>
-      <a href="#experience">Experience</a>
-      <a href="#achievements">Achievements</a>
-      <a href="#why">Why Claude</a>
-      <a href="#contact">Contact</a>
+<!-- NAVIGATION -->
+<nav class="sticky top-0 z-50 bg-paper/90 backdrop-blur-md border-b border-blueprint_line/60 transition-all duration-300">
+  <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+    <a href="#hero-section" class="font-serif font-bold text-xl tracking-tight text-ink flex items-center gap-2 hover:opacity-80 transition-opacity">
+      <span class="w-3 h-3 bg-accent rounded-full inline-block"></span>
+      Muh. Fachri Akbar
+    </a>
+    
+    <!-- Desktop Links -->
+    <div class="hidden md:flex gap-8 font-mono text-sm">
+      <a href="#about" class="text-steel hover:text-accent transition-colors">01. About</a>
+      <a href="#experience" class="text-steel hover:text-accent transition-colors">02. Experience</a>
+      <a href="#achievements" class="text-steel hover:text-accent transition-colors">03. Impact</a>
+      <a href="#why" class="text-steel hover:text-accent transition-colors">04. Claude</a>
+      <a href="#contact" class="text-steel hover:text-accent transition-colors">05. Contact</a>
     </div>
+
+    <!-- Mobile Menu Button -->
+    <button id="mobileMenuBtn" class="md:hidden text-ink p-2">
+      <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"></path></svg>
+    </button>
+  </div>
+  
+  <!-- Mobile Menu Overlay -->
+  <div id="mobileMenu" class="hidden md:hidden bg-paper border-b border-blueprint_line absolute w-full font-mono text-sm px-6 py-4 flex-col gap-4 shadow-xl">
+    <a href="#about" class="block text-steel hover:text-accent">01. About</a>
+    <a href="#experience" class="block text-steel hover:text-accent">02. Experience</a>
+    <a href="#achievements" class="block text-steel hover:text-accent">03. Impact</a>
+    <a href="#why" class="block text-steel hover:text-accent">04. Claude</a>
+    <a href="#contact" class="block text-steel hover:text-accent">05. Contact</a>
   </div>
 </nav>
 
 <!-- HERO -->
-<section class="grid-bg">
-  <div class="sheet">
-    <div class="sheet-tag">
-      <span>Sheet 01 / 06 <span class="accent-dot">·</span> Portfolio</span>
-      <span>Makassar, Indonesia</span>
-    </div>
+<section class="grid-bg animate-grid-drift relative overflow-hidden min-h-[90vh] flex items-center border-b border-blueprint_line" id="hero-section">
+  <!-- Interactive CAD Crosshair -->
+  <div class="hero-crosshair absolute w-px h-px pointer-events-none opacity-0 transition-opacity duration-200 z-10" id="heroCrosshair">
+    <span class="absolute top-3 left-3 font-mono text-[10px] text-accent whitespace-nowrap bg-paper/90 px-1 border border-accent/20 rounded-sm shadow-sm" id="heroCoord">X:000 Y:000</span>
+  </div>
 
-    <h1 class="hero-title">Drafting the blueprint for a more AI‑literate campus.</h1>
+  <div class="max-w-6xl mx-auto px-6 w-full py-16 relative">
+    <!-- Inner Sheet Frame -->
+    <div class="relative px-4 py-8 md:p-12 border-x border-blueprint_line/50 sheet-corners bg-paper/60 backdrop-blur-sm shadow-2xl shadow-blueprint_line/20">
+      
+      <!-- Watermark Compass -->
+      <svg class="compass-mark text-blueprint" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.4">
+        <circle cx="24" cy="24" r="19"/>
+        <line x1="24" y1="3" x2="24" y2="10"/>
+        <line x1="24" y1="38" x2="24" y2="45"/>
+        <line x1="3" y1="24" x2="10" y2="24"/>
+        <line x1="38" y1="24" x2="45" y2="24"/>
+        <circle cx="24" cy="24" r="2.2" fill="currentColor" stroke="none"/>
+        <line x1="24" y1="24" x2="24" y2="9" stroke-width="2"/>
+      </svg>
 
-    <p class="hero-sub">
-      I'm Fachri — a civil engineering student who spends as much time training people to use AI well
-      as I spend in structural drawings. Over the past year I've built and run community programs that
-      took AI literacy to 260+ students across 9 universities, and I want to bring that same groundwork
-      to a Claude Campus Ambassador role.
-    </p>
+      <!-- Sheet Meta -->
+      <div class="flex justify-between items-baseline font-mono text-xs text-steel mb-12 relative z-10">
+        <span class="flex items-center gap-2">Sheet 01 / 06 <span class="text-accent">•</span> Portfolio</span>
+        <span>Makassar, IDN</span>
+      </div>
 
-    <div class="hero-meta">
-      <span>Civil Engineering, PNUP Makassar</span>
-      <span>Top 50 Gemini Achiever, GSA Indonesia</span>
-      <span>1M+ monthly content views</span>
-    </div>
+      <div class="flex flex-col-reverse md:flex-row gap-10 md:gap-16 items-center md:items-start">
+        
+        <!-- Hero Text -->
+        <div class="flex-1 max-w-2xl relative z-10">
+          <h1 class="font-serif text-4xl md:text-5xl lg:text-6xl text-ink leading-[1.1] mb-6">
+            Drafting the blueprint for a more <span class="text-accent italic">AI‑literate</span> campus.
+          </h1>
 
-    <div class="cta-row">
-      <a href="#experience" class="btn btn-solid">See the work</a>
-      <a href="#contact" class="btn btn-line">Get in touch</a>
+          <p class="text-lg text-steel/90 max-w-[56ch] leading-relaxed mb-8">
+            I'm Fachri — a Civil Engineering student applying <strong>Structural Logic to Digital Ecosystems</strong>. Over the past year, I've led teams to bring AI literacy to 260+ students across 9 universities, and I'm ready to bring that groundwork to a Claude Campus Ambassador role.
+          </p>
+
+          <div class="flex flex-wrap gap-4 font-mono text-xs text-steel mb-10">
+            <span class="flex items-center gap-1.5"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg> Civil Engineering, PNUP</span>
+            <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg> Top 50 Gemini Achiever</span>
+            <span class="flex items-center gap-1.5"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg> 1M+ Monthly Views</span>
+          </div>
+
+          <div class="flex flex-wrap gap-4">
+            <a href="#experience" class="font-mono text-sm px-6 py-3 bg-accent text-paper hover:bg-ink hover:text-paper transition-all duration-300 rounded-sm shadow-md hover:shadow-lg">See the work</a>
+            <a href="#contact" class="font-mono text-sm px-6 py-3 border border-ink text-ink hover:bg-ink hover:text-paper transition-all duration-300 rounded-sm">Get in touch</a>
+          </div>
+        </div>
+
+        <!-- Big Portrait Profile Photo (3:4 Aspect Ratio) -->
+        <div class="shrink-0 w-56 md:w-72 lg:w-80 aspect-[3/4] relative z-10 group">
+          <div class="absolute inset-0 bg-accent translate-x-4 translate-y-4 rounded-tr-[3rem] rounded-bl-[3rem] transition-transform duration-300 group-hover:translate-x-5 group-hover:translate-y-5"></div>
+          <div class="relative w-full h-full border-2 border-ink bg-paper overflow-hidden rounded-tr-[3rem] rounded-bl-[3rem] z-10">
+            <!-- Pastikan file foto profilmu berukuran potret (misal: 1200x1600 px) -->
+            <img src="foto-profil.jpg" alt="Muh. Fachri Akbar" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://placehold.co/600x800/F9F8F6/2D2B2A?font=Playfair+Display&text=Fachri';">
+          </div>
+        </div>
+
+      </div>
     </div>
   </div>
 </section>
 
 <!-- ABOUT -->
-<section id="about">
-  <div class="sheet">
-    <div class="sheet-tag">
-      <span>Sheet 02 / 06 <span class="accent-dot">·</span> About</span>
+<section id="about" class="py-20 md:py-32">
+  <div class="max-w-4xl mx-auto px-6">
+    <div class="flex justify-between items-baseline font-mono text-xs text-steel mb-16 border-b border-blueprint_line pb-4">
+      <span class="flex items-center gap-2">Sheet 02 / 06 <span class="text-accent">•</span> About</span>
       <span>Background</span>
     </div>
 
-    <div class="sec-head">
-      <span class="sec-num">01</span>
-      <h2>Two disciplines, one habit: making complex things usable.</h2>
-    </div>
-
-    <div class="about-grid">
-      <div class="about-copy">
-        <p>
-          I'm currently studying Construction Services at Politeknik Negeri Ujung Pandang (PNUP) in
-          Makassar, where coursework in construction management and technical problem-solving has
-          taught me to think in systems — how a plan holds together under real-world constraints.
-          I've carried that same systems mindset into how I use and teach AI, treating it as
-          infrastructure for better research, learning, and decision-making rather than a novelty.
-        </p>
-        <p>
-          That habit turned into a second track outside the classroom. As a Google Student Ambassador,
-          selected from over 81,000 national applicants, I planned and led a national AI training
-          seminar, and I run a content channel on AI literacy and productivity that has reached
-          over a million views a month. Both are exercises in the same skill: taking something
-          technical and making it land with people who've never touched it before.
-        </p>
-        <p>
-          I care about grassroots technology adoption — not top-down announcements, but workshops,
-          conversations, and content that meet students where they are. That's the work I want to keep
-          doing, now with Claude.
-        </p>
+    <div class="reveal">
+      <div class="flex items-end gap-4 mb-10">
+        <span class="font-mono text-sm text-accent mb-2">01</span>
+        <h2 class="font-serif text-3xl md:text-4xl text-ink">Two disciplines, one habit: making complex things usable.</h2>
       </div>
 
-      <div class="fact-strip">
-        <div class="fact-row"><span class="k">Institution</span><span class="v">Politeknik Negeri Ujung Pandang</span></div>
-        <div class="fact-row"><span class="k">Program</span><span class="v">Construction Services (Civil Eng.)</span></div>
-        <div class="fact-row"><span class="k">GPA</span><span class="v">3.68 / 4.00</span></div>
-        <div class="fact-row"><span class="k">Ambassador tier</span><span class="v">Top 50 Gemini Achiever</span></div>
-        <div class="fact-row"><span class="k">National standing</span><span class="v">Top 2.5% of 81,000+</span></div>
-        <div class="fact-row"><span class="k">Location</span><span class="v">Makassar, Indonesia</span></div>
+      <div class="grid grid-cols-1 md:grid-cols-[1.5fr_1fr] gap-12 md:gap-16">
+        <div class="space-y-6 text-lg text-ink/80 leading-relaxed font-sans">
+          <p>
+            I'm currently studying Construction Services at Politeknik Negeri Ujung Pandang (PNUP). My approach is rooted in <strong>"Structural Logic Applied to Digital Ecosystems"</strong> — transforming the technical precision and problem-solving framework of civil engineering into logical, efficient digital workflows.
+          </p>
+          <p>
+            I position myself as a bridge between human needs and technological efficiency. As a Top 50 Gemini Achiever (selected from 81,000+ national applicants), I led a national AI seminar and run a content channel reaching over 1M+ views monthly. My strength lies in Strategic Tool-Stack Optimization: turning complex AI frameworks into accessible, everyday solutions for students.
+          </p>
+          <p>
+            Beyond the screen, I am a trained community leader and public speaker. From managing cross-regional logistics for a 1,700+ member national scout contingent to mediating organizational dynamics, I build communities through active listening and effective coordination. That is the exact grassroots infrastructure I want to build as a Claude Campus Ambassador.
+          </p>
+        </div>
+
+        <div class="font-mono text-sm border-t border-blueprint_line">
+          <div class="flex justify-between py-4 border-b border-blueprint_line/50 hover:bg-blueprint_line/10 transition-colors px-2">
+            <span class="text-steel">Institution</span><span class="text-right text-ink font-medium">Politeknik Negeri Ujung Pandang</span>
+          </div>
+          <div class="flex justify-between py-4 border-b border-blueprint_line/50 hover:bg-blueprint_line/10 transition-colors px-2">
+            <span class="text-steel">Program</span><span class="text-right text-ink font-medium">Civil Eng.</span>
+          </div>
+          <div class="flex justify-between py-4 border-b border-blueprint_line/50 hover:bg-blueprint_line/10 transition-colors px-2">
+            <span class="text-steel">GPA</span><span class="text-right text-ink font-medium">3.68 / 4.00</span>
+          </div>
+          <div class="flex justify-between py-4 border-b border-blueprint_line/50 hover:bg-blueprint_line/10 transition-colors px-2">
+            <span class="text-steel">Ambassador</span><span class="text-right text-accent font-medium">Top 50 Gemini Achiever</span>
+          </div>
+          <div class="flex justify-between py-4 border-b border-blueprint_line/50 hover:bg-blueprint_line/10 transition-colors px-2">
+            <span class="text-steel">Location</span><span class="text-right text-ink font-medium">Makassar, IDN</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- EXPERIENCE -->
-<section id="experience" class="grid-bg">
-  <div class="sheet">
-    <div class="sheet-tag">
-      <span>Sheet 03 / 06 <span class="accent-dot">·</span> Experience</span>
+<section id="experience" class="py-20 md:py-32 bg-[#F3F1EC] border-y border-blueprint_line">
+  <div class="max-w-4xl mx-auto px-6">
+    <div class="flex justify-between items-baseline font-mono text-xs text-steel mb-16 border-b border-blueprint_line/70 pb-4">
+      <span class="flex items-center gap-2">Sheet 03 / 06 <span class="text-accent">•</span> Experience</span>
       <span>2025 — Present</span>
     </div>
 
-    <div class="sec-head">
-      <span class="sec-num">02</span>
-      <h2>Experience &amp; leadership</h2>
-    </div>
-
-    <div class="timeline">
-      <div class="tl-item">
-        <span class="tl-date">Apr 2026 – Aug 2026</span>
-        <div class="tl-role">Top 50 Gemini Achiever &amp; AI Masterclass Main Trainer</div>
-        <div class="tl-org">Google Student Ambassador (GSA), Indonesia National Program</div>
-        <ul>
-          <li>Selected from 81,000+ national applicants and progressed to the Top 50 Gemini Achiever tier through community engagement and AI advocacy.</li>
-          <li>Led the flagship national seminar "Adami Google AI Tools Masterclass" as Main Trainer, directing a 32-member multidisciplinary committee to reach 260+ hybrid attendees from 9 universities.</li>
-          <li>Designed and facilitated 8 workshops on prompt engineering, agentic AI frameworks, and academic workflow automation, closing with a 10/10 participant satisfaction score.</li>
-          <li>Won "Monthly Champion" and ranked Top 10 in the Weekly Content Challenge for educational content.</li>
-        </ul>
-      </div>
-
-      <div class="tl-item">
-        <span class="tl-date">2025 – Present</span>
-        <div class="tl-role">Tech Evangelist</div>
-        <div class="tl-org">Digital Content Creator (AI &amp; Tech Productivity) — Instagram &amp; TikTok</div>
-        <ul>
-          <li>Create and distribute educational content on AI literacy, prompt engineering, and digital productivity, reaching 1M+ monthly views among student audiences.</li>
-        </ul>
-      </div>
-
-      <div class="tl-item">
-        <span class="tl-date">Aug 2026</span>
-        <div class="tl-role">Guest Speaker &amp; Tech Educator</div>
-        <div class="tl-org">Novo Club Batch 4 by Paragon, Makassar</div>
-        <ul>
-          <li>Delivered "AI Insight for Student: Understanding AI Fundamentals and Opportunities" to 20+ emerging student leaders.</li>
-          <li>Facilitated discussion on ethical AI use and practical productivity tools for local student communities.</li>
-        </ul>
-      </div>
-
-      <div class="tl-item">
-        <span class="tl-date">Aug 2026 – Present</span>
-        <div class="tl-role">Academic Development &amp; Talent Department Staff</div>
-        <div class="tl-org">Civil Engineering Student Association (HMS), PNUP</div>
-        <ul>
-          <li>Co-developed 3 evaluation programs to identify and support the academic potential of the incoming 2026 civil engineering cohort.</li>
-          <li>Served as Class Representative for the 1B Construction Services program, bridging students and faculty.</li>
-        </ul>
-      </div>
-
-      <div class="tl-item">
-        <span class="tl-date">Nov 2025 – Present</span>
-        <div class="tl-role">Contingent Leader, Judge &amp; Committee Member</div>
-        <div class="tl-org">Gerakan Pramuka (Scout Movement), Makassar</div>
-        <ul>
-          <li>Coordinated the Makassar City delegation for a national forum of 1,700+ members as Contingent Leader.</li>
-          <li>Ran event operations as Core Committee Member for the city branch leadership course (KPDK), and judged the Manihot Scout Competition.</li>
-        </ul>
+    <div class="reveal mb-12">
+      <div class="flex items-end gap-4">
+        <span class="font-mono text-sm text-accent mb-2">02</span>
+        <h2 class="font-serif text-3xl md:text-4xl text-ink">Experience & leadership</h2>
       </div>
     </div>
 
-    <div class="earlier-box">
-      <h3>Earlier leadership record</h3>
-      <ul>
-        <li><strong>President, Class Representative Council (MPK), SMAN 7 Makassar</strong> (2024–2025) — led 60 officers, ran the SMANET CUP 2024 steering committee of 55, and briefed 300+ incoming students.</li>
-        <li><strong>Vice Secretary, MPK, SMAN 7 Makassar</strong> (2023–2024) — organizational administration and documentation.</li>
-        <li><strong>Administration Division Coordinator, Scout Unit, SMAN 7 Makassar</strong> (2023) — leadership roster and inventory management.</li>
-        <li><strong>Vice President, Student Council (OSIS), SMPN 14 Makassar</strong> (2021–2022) — reactivated student council operations after a pandemic-related hiatus.</li>
+    <!-- Timeline Layout -->
+    <div class="relative pl-4 md:pl-8 border-l-2 border-blueprint_line/60 space-y-12">
+      
+      <!-- Item 1 -->
+      <div class="tl-item relative reveal">
+        <div class="tl-dot absolute -left-[21px] md:-left-[37px] top-1.5 w-3 h-3 bg-paper border-2 border-accent rounded-full animate-pulse-ring z-10"></div>
+        <div class="mb-1">
+          <span class="font-mono text-xs text-accent font-medium bg-accent/10 px-2 py-1 rounded">Apr 2026 – Aug 2026</span>
+        </div>
+        <h3 class="font-serif text-xl font-semibold mt-3 text-ink">Top 50 Gemini Achiever & AI Masterclass Main Trainer</h3>
+        <div class="text-sm font-mono text-steel mb-4">Google Student Ambassador (GSA), Indonesia</div>
+        <ul class="list-disc pl-5 space-y-2 text-ink/80">
+          <li>Selected from 81,000+ national applicants and progressed to the Top 50 Gemini Achiever tier.</li>
+          <li>Led flagship national seminar "Adami Google AI Tools Masterclass" as Main Trainer, directing a 32-member committee to reach 260+ hybrid attendees from 9 universities.</li>
+          <li>Designed and facilitated 8 workshops on prompt engineering and workflow automation, achieving a 10/10 participant satisfaction score.</li>
+        </ul>
+      </div>
+
+      <!-- Item 2 -->
+      <div class="tl-item relative reveal">
+        <div class="tl-dot absolute -left-[21px] md:-left-[37px] top-1.5 w-3 h-3 bg-paper border-2 border-blueprint rounded-full z-10"></div>
+        <div class="mb-1">
+          <span class="font-mono text-xs text-blueprint font-medium bg-blueprint/10 px-2 py-1 rounded">2025 – Present</span>
+        </div>
+        <h3 class="font-serif text-xl font-semibold mt-3 text-ink">Tech Evangelist & Content Creator</h3>
+        <div class="text-sm font-mono text-steel mb-4">Instagram & TikTok (AI & Productivity)</div>
+        <ul class="list-disc pl-5 space-y-2 text-ink/80">
+          <li>Create and distribute educational content on AI literacy, reaching 1M+ monthly views among student audiences.</li>
+        </ul>
+      </div>
+
+      <!-- Item 3 -->
+      <div class="tl-item relative reveal">
+        <div class="tl-dot absolute -left-[21px] md:-left-[37px] top-1.5 w-3 h-3 bg-paper border-2 border-blueprint rounded-full z-10"></div>
+        <div class="mb-1">
+          <span class="font-mono text-xs text-blueprint font-medium bg-blueprint/10 px-2 py-1 rounded">Aug 2026</span>
+        </div>
+        <h3 class="font-serif text-xl font-semibold mt-3 text-ink">Guest Speaker & Tech Educator</h3>
+        <div class="text-sm font-mono text-steel mb-4">Novo Club Batch 4 by Paragon, Makassar</div>
+        <ul class="list-disc pl-5 space-y-2 text-ink/80">
+          <li>Delivered "AI Insight for Student: Understanding AI Fundamentals" to 20+ emerging student leaders.</li>
+        </ul>
+      </div>
+
+      <!-- Item 4 -->
+      <div class="tl-item relative reveal">
+        <div class="tl-dot absolute -left-[21px] md:-left-[37px] top-1.5 w-3 h-3 bg-paper border-2 border-blueprint rounded-full z-10"></div>
+        <div class="mb-1">
+          <span class="font-mono text-xs text-blueprint font-medium bg-blueprint/10 px-2 py-1 rounded">Aug 2026 – Present</span>
+        </div>
+        <h3 class="font-serif text-xl font-semibold mt-3 text-ink">Academic Development Staff</h3>
+        <div class="text-sm font-mono text-steel mb-4">Civil Engineering Student Association (HMS), PNUP</div>
+        <ul class="list-disc pl-5 space-y-2 text-ink/80">
+          <li>Co-developed 3 strategic evaluation programs to identify and nurture academic potential for the incoming 2026 cohort.</li>
+        </ul>
+      </div>
+    </div> <!-- PENUTUP TIMELINE -->
+
+    <!-- FIELD DOCUMENTATION GALLERY (Kembali ke rasio 4:3, 2 Kolom) -->
+    <div class="mt-16 reveal">
+      <h3 class="font-mono text-sm font-semibold text-accent mb-6 flex items-center gap-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg> Field Documentation
+      </h3>
+      
+      <div class="grid grid-cols-2 gap-3 md:gap-4">
+        
+        <!-- Gallery Item 1 -->
+        <div class="aspect-[4/3] rounded-lg overflow-hidden border border-blueprint_line relative group shadow-sm cursor-pointer">
+          <div class="mini-slider-track">
+            <img src="galeri-1a.jpg" class="mini-slider-item" onerror="this.src='https://placehold.co/600x450/F9F8F6/DA5D35?text=AI+1';">
+            <img src="galeri-1b.jpg" class="mini-slider-item" onerror="this.src='https://placehold.co/600x450/F9F8F6/4A6984?text=AI+2';">
+            <img src="galeri-1c.jpg" class="mini-slider-item" onerror="this.src='https://placehold.co/600x450/F9F8F6/2D2B2A?text=AI+3';">
+          </div>
+          <div class="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4 md:p-5 pointer-events-none">
+            <span class="text-paper font-mono text-[10px] md:text-xs">AI Tools Masterclass</span>
+          </div>
+        </div>
+
+        <!-- Gallery Item 2 -->
+        <div class="aspect-[4/3] rounded-lg overflow-hidden border border-blueprint_line relative group shadow-sm cursor-pointer">
+          <div class="mini-slider-track" style="animation-delay: -3s;">
+            <img src="galeri-2a.jpg" class="mini-slider-item" onerror="this.src='https://placehold.co/600x450/F9F8F6/4A6984?text=Content+1';">
+            <img src="galeri-2b.jpg" class="mini-slider-item" onerror="this.src='https://placehold.co/600x450/F9F8F6/2D2B2A?text=Content+2';">
+            <img src="galeri-2c.jpg" class="mini-slider-item" onerror="this.src='https://placehold.co/600x450/F9F8F6/DA5D35?text=Content+3';">
+          </div>
+          <div class="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4 md:p-5 pointer-events-none">
+            <span class="text-paper font-mono text-[10px] md:text-xs">Digital Content Prod.</span>
+          </div>
+        </div>
+
+        <!-- Gallery Item 3 -->
+        <div class="aspect-[4/3] rounded-lg overflow-hidden border border-blueprint_line relative group shadow-sm cursor-pointer">
+          <div class="mini-slider-track" style="animation-delay: -6s;">
+            <img src="galeri-3a.jpg" class="mini-slider-item" onerror="this.src='https://placehold.co/600x450/F9F8F6/2D2B2A?text=Civil+1';">
+            <img src="galeri-3b.jpg" class="mini-slider-item" onerror="this.src='https://placehold.co/600x450/F9F8F6/DA5D35?text=Civil+2';">
+            <img src="galeri-3c.jpg" class="mini-slider-item" onerror="this.src='https://placehold.co/600x450/F9F8F6/4A6984?text=Civil+3';">
+          </div>
+          <div class="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4 md:p-5 pointer-events-none">
+            <span class="text-paper font-mono text-[10px] md:text-xs">BIM & Civil Eng.</span>
+          </div>
+        </div>
+
+        <!-- Gallery Item 4 -->
+        <div class="aspect-[4/3] rounded-lg overflow-hidden border border-blueprint_line relative group shadow-sm cursor-pointer">
+          <div class="mini-slider-track" style="animation-delay: -9s;">
+            <img src="galeri-4a.jpg" class="mini-slider-item" onerror="this.src='https://placehold.co/600x450/F9F8F6/DA5D35?text=Scout+1';">
+            <img src="galeri-4b.jpg" class="mini-slider-item" onerror="this.src='https://placehold.co/600x450/F9F8F6/4A6984?text=Scout+2';">
+            <img src="galeri-4c.jpg" class="mini-slider-item" onerror="this.src='https://placehold.co/600x450/F9F8F6/2D2B2A?text=Scout+3';">
+          </div>
+          <div class="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4 md:p-5 pointer-events-none">
+            <span class="text-paper font-mono text-[10px] md:text-xs">Community Leadership</span>
+          </div>
+        </div>
+
+      </div>
+    </div> <!-- PENUTUP GALERI -->
+
+    <!-- Earlier Leadership Box -->
+    <div class="mt-16 p-6 md:p-8 bg-white border border-blueprint_line/80 rounded-lg shadow-sm reveal">
+      <h3 class="font-mono text-sm font-semibold text-accent mb-4 flex items-center gap-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> Past Leadership Record
+      </h3>
+      <ul class="list-disc pl-5 space-y-3 text-ink/80 text-sm md:text-base">
+        <li><strong>Contingent Leader & Core Committee, Scout Movement</strong> (2023–2025) — Coordinated the Makassar City delegation for a national forum of 1,700+ members, participated in Raimuna Nasional Jakarta, and managed event operations for KPDK.</li>
+        <li><strong>President, Class Representative Council (MPK), SMAN 7 Makassar</strong> (2024–2025) — Managed 60 organizational officers, served as Steering Committee leading 55 members for SMANET CUP, and briefed 300+ incoming students via public speaking.</li>
+        <li><strong>Digital Toolkit & Software Proficiency</strong> — Large Language Models, Prompt Engineering, Notion, Figma, CapCut, AutoCAD, Tekla Structures, and Building Information Modeling (BIM).</li>
       </ul>
     </div>
   </div>
 </section>
 
 <!-- ACHIEVEMENTS -->
-<section id="achievements">
-  <div class="sheet">
-    <div class="sheet-tag">
-      <span>Sheet 04 / 06 <span class="accent-dot">·</span> Achievements</span>
+<section id="achievements" class="py-20 md:py-32">
+  <div class="max-w-5xl mx-auto px-6">
+    <div class="flex justify-between items-baseline font-mono text-xs text-steel mb-16 border-b border-blueprint_line pb-4">
+      <span class="flex items-center gap-2">Sheet 04 / 06 <span class="text-accent">•</span> Achievements</span>
       <span>Measured outcomes</span>
     </div>
 
-    <div class="sec-head">
-      <span class="sec-num">03</span>
-      <h2>What the work has added up to</h2>
+    <div class="reveal mb-12">
+      <div class="flex items-end gap-4">
+        <span class="font-mono text-sm text-accent mb-2">03</span>
+        <h2 class="font-serif text-3xl md:text-4xl text-ink">What the work adds up to</h2>
+      </div>
     </div>
 
-    <div class="stat-grid">
-      <div class="stat-cell"><div class="stat-num">260+</div><div class="stat-label">Participants trained across the AI Masterclass</div></div>
-      <div class="stat-cell"><div class="stat-num">9</div><div class="stat-label">Universities represented in that program</div></div>
-      <div class="stat-cell"><div class="stat-num">10/10</div><div class="stat-label">Participant satisfaction score</div></div>
-      <div class="stat-cell"><div class="stat-num">1M+</div><div class="stat-label">Monthly views on AI &amp; productivity content</div></div>
-      <div class="stat-cell"><div class="stat-num">32</div><div class="stat-label">Person committee led as Main Trainer</div></div>
-      <div class="stat-cell"><div class="stat-num">Top 2.5%</div><div class="stat-label">National rank among 81,000+ GSA applicants</div></div>
-      <div class="stat-cell"><div class="stat-num">1,700+</div><div class="stat-label">Member national scout forum coordinated</div></div>
-      <div class="stat-cell"><div class="stat-num">300+</div><div class="stat-label">Incoming students briefed as MPK President</div></div>
+    <!-- Bento Stats Grid -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16">
+      <div class="bg-white border border-blueprint_line/50 p-6 rounded-xl shadow-sm hover:shadow-md hover:-translate-y-1 transition-all reveal relative overflow-hidden group">
+        <div class="absolute bottom-0 left-0 h-1 bg-accent w-0 group-hover:w-full transition-all duration-300"></div>
+        <div class="font-serif text-4xl md:text-5xl font-bold text-ink mb-2 stat-num" data-count="260" data-suffix="+">0</div>
+        <div class="text-sm text-steel leading-tight">Participants trained across the AI Masterclass</div>
+      </div>
+      <div class="bg-white border border-blueprint_line/50 p-6 rounded-xl shadow-sm hover:shadow-md hover:-translate-y-1 transition-all reveal relative overflow-hidden group">
+        <div class="absolute bottom-0 left-0 h-1 bg-accent w-0 group-hover:w-full transition-all duration-300"></div>
+        <div class="font-serif text-4xl md:text-5xl font-bold text-ink mb-2 stat-num" data-count="9">0</div>
+        <div class="text-sm text-steel leading-tight">Universities represented in programs</div>
+      </div>
+      <div class="bg-white border border-blueprint_line/50 p-6 rounded-xl shadow-sm hover:shadow-md hover:-translate-y-1 transition-all reveal relative overflow-hidden group">
+        <div class="absolute bottom-0 left-0 h-1 bg-accent w-0 group-hover:w-full transition-all duration-300"></div>
+        <div class="font-serif text-4xl md:text-5xl font-bold text-ink mb-2 stat-num" data-count="10" data-suffix="/10">0</div>
+        <div class="text-sm text-steel leading-tight">Participant satisfaction score</div>
+      </div>
+      <div class="bg-white border border-blueprint_line/50 p-6 rounded-xl shadow-sm hover:shadow-md hover:-translate-y-1 transition-all reveal relative overflow-hidden group">
+        <div class="absolute bottom-0 left-0 h-1 bg-accent w-0 group-hover:w-full transition-all duration-300"></div>
+        <div class="font-serif text-4xl md:text-5xl font-bold text-ink mb-2 stat-num" data-count="1" data-suffix="M+">0</div>
+        <div class="text-sm text-steel leading-tight">Monthly views on AI & content</div>
+      </div>
     </div>
 
-    <div class="cert-list">
-      <div class="cert-item"><span class="yr">2026</span><span>Certificate of Completion, Group Project — Novo Club Batch 4 by Paragon &amp; Globerse</span></div>
-      <div class="cert-item"><span class="yr">2026</span><span>Certificate of Graduation — Google Student Ambassador, Class of 2026</span></div>
-      <div class="cert-item"><span class="yr">2026</span><span>Main Trainer Certificate — National Seminar "Adami Google AI Tools Masterclass"</span></div>
-      <div class="cert-item"><span class="yr">2026</span><span>Guest Speaker Certificate — "AI Insight for Student," Novo Club Paragon</span></div>
+    <!-- Photo Proofs (With Placehold.co Fallbacks) -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 reveal">
+      <div class="space-y-2">
+        <div class="aspect-[4/3] rounded-lg overflow-hidden border border-blueprint_line relative group">
+          <img src="bukti-1.jpg" alt="AI Masterclass" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" onerror="this.onerror=null; this.src='https://placehold.co/600x400/F9F8F6/4A6984?text=AI+Masterclass';">
+        </div>
+        <div class="font-mono text-[11px] text-steel">AI Tools Masterclass, Main Trainer</div>
+      </div>
+      <div class="space-y-2">
+        <div class="aspect-[4/3] rounded-lg overflow-hidden border border-blueprint_line relative group">
+          <img src="bukti-2.jpg" alt="GSA Certificate" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" onerror="this.onerror=null; this.src='https://placehold.co/600x400/F9F8F6/4A6984?text=GSA+Certificate';">
+        </div>
+        <div class="font-mono text-[11px] text-steel">Sertifikat GSA Indonesia</div>
+      </div>
+      <div class="space-y-2">
+        <div class="aspect-[4/3] rounded-lg overflow-hidden border border-blueprint_line relative group">
+          <img src="bukti-3.jpg" alt="Novo Club" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" onerror="this.onerror=null; this.src='https://placehold.co/600x400/F9F8F6/4A6984?text=Novo+Club';">
+        </div>
+        <div class="font-mono text-[11px] text-steel">Guest Speaker, Novo Club</div>
+      </div>
+      <div class="space-y-2">
+        <div class="aspect-[4/3] rounded-lg overflow-hidden border border-blueprint_line relative group">
+          <img src="bukti-4.jpg" alt="Pramuka" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" onerror="this.onerror=null; this.src='https://placehold.co/600x400/F9F8F6/4A6984?text=Scout+Movement';">
+        </div>
+        <div class="font-mono text-[11px] text-steel">Gerakan Pramuka Documentation</div>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- WHY CLAUDE -->
-<section id="why" class="grid-bg-dark">
-  <div class="sheet">
-    <div class="sheet-tag">
-      <span>Sheet 05 / 06 <span class="accent-dot">·</span> Why Claude</span>
+<!-- WHY CLAUDE (Dark Theme) -->
+<section id="why" class="py-20 md:py-32 grid-bg-dark animate-grid-drift relative">
+  <div class="max-w-5xl mx-auto px-6 relative z-10">
+    <div class="flex justify-between items-baseline font-mono text-xs text-paper/60 mb-16 border-b border-paper/20 pb-4">
+      <span class="flex items-center gap-2">Sheet 05 / 06 <span class="text-accent">•</span> Why Claude</span>
       <span>Campus Ambassador</span>
     </div>
 
-    <div class="sec-head">
-      <span class="sec-num">04</span>
-      <h2>Why Claude Campus Ambassador</h2>
+    <div class="reveal mb-12">
+      <div class="flex items-end gap-4">
+        <span class="font-mono text-sm text-accent mb-2">04</span>
+        <h2 class="font-serif text-3xl md:text-4xl text-paper">Why Claude Campus Ambassador</h2>
+      </div>
     </div>
 
-    <div class="why-wrap">
-      <div class="why-copy">
+    <div class="grid grid-cols-1 md:grid-cols-[1.1fr_0.9fr] gap-12 md:gap-16">
+      <div class="space-y-6 text-lg text-paper/80 leading-relaxed font-sans reveal">
         <p>
-          I've already run the version of this job without the title. The Adami Google AI Tools
-          Masterclass proved I can take a technical subject, build a curriculum around it, and get a
-          multi-university audience to sit through 8 workshops and rate it a perfect 10/10. Claude asks
-          for exactly that muscle: turning "how do I use an AI assistant well" into workshops,
-          demos, and conversations students actually want to attend.
+          I've already run the version of this job without the title. The Adami Google AI Tools Masterclass proved I can take a technical subject, build a curriculum around it, and get a multi-university audience to sit through 8 workshops and rate it a perfect 10/10. Claude asks for exactly that muscle: turning "how do I use an AI assistant well" into workshops, demos, and conversations students actually want to attend.
         </p>
         <p>
-          I'd rather build community than broadcast to it. Leading a 32-member committee, coordinating
-          a 1,700-member scout delegation, and running a student council all taught me the same thing —
-          adoption happens through people you've trained to carry the message further, not through a
-          single event. That's how I'd approach Claude on campus: a core group of confident users first,
-          then workshops and content that let them spread it themselves.
+          I'd rather build community than broadcast to it. Leading a 32-member committee, coordinating a 1,700-member scout delegation, and running a student council all taught me the same thing — adoption happens through people you've trained to carry the message further. That's how I'd approach Claude on campus: a core group of confident users first, then workshops and content that let them spread it themselves.
         </p>
         <p>
-          And I already have the distribution. A content channel built specifically around AI literacy,
-          reaching 1M+ views a month, means campus outreach doesn't start from zero — it starts from an
-          audience that already trusts me to explain this stuff clearly.
+          And I already have the distribution. A content channel built specifically around AI literacy, reaching 1M+ views a month, means campus outreach doesn't start from zero — it starts from an audience that already trusts me to explain this stuff clearly.
         </p>
       </div>
 
-      <ul class="why-list">
-        <li><span class="tag">Train</span><span>Design and run hands-on Claude workshops, using the same format that got a 10/10 satisfaction score at national scale.</span></li>
-        <li><span class="tag">Create</span><span>Produce short-form content that teaches practical Claude use cases to a student audience already built and engaged.</span></li>
-        <li><span class="tag">Organize</span><span>Recruit and lead a campus committee, the way I've led 32- and 55-member teams before, so the program outlives any single event.</span></li>
-        <li><span class="tag">Bridge</span><span>Connect a civil engineering department with computing and AI communities across 9+ universities I already have ties to.</span></li>
+      <ul class="space-y-4">
+        <li class="reveal bg-paper/5 border border-paper/10 p-5 rounded-lg hover:bg-paper/10 transition-colors flex gap-4">
+          <span class="font-mono text-xs text-accent mt-1 w-16 shrink-0">Train</span>
+          <span class="text-sm text-paper/90">Design and run hands-on Claude workshops, using the same format that got a 10/10 satisfaction score at national scale.</span>
+        </li>
+        <li class="reveal bg-paper/5 border border-paper/10 p-5 rounded-lg hover:bg-paper/10 transition-colors flex gap-4">
+          <span class="font-mono text-xs text-accent mt-1 w-16 shrink-0">Create</span>
+          <span class="text-sm text-paper/90">Produce short-form content that teaches practical Claude use cases to a student audience already built and engaged.</span>
+        </li>
+        <li class="reveal bg-paper/5 border border-paper/10 p-5 rounded-lg hover:bg-paper/10 transition-colors flex gap-4">
+          <span class="font-mono text-xs text-accent mt-1 w-16 shrink-0">Organize</span>
+          <span class="text-sm text-paper/90">Recruit and lead a campus committee, the way I've led 32- and 55-member teams before, so the program outlives any single event.</span>
+        </li>
+        <li class="reveal bg-paper/5 border border-paper/10 p-5 rounded-lg hover:bg-paper/10 transition-colors flex gap-4">
+          <span class="font-mono text-xs text-accent mt-1 w-16 shrink-0">Bridge</span>
+          <span class="text-sm text-paper/90">Connect a civil engineering department with computing and AI communities across 9+ universities I already have ties to.</span>
+        </li>
       </ul>
     </div>
   </div>
 </section>
 
 <!-- CONTACT -->
-<section id="contact">
-  <div class="sheet">
-    <div class="sheet-tag">
-      <span>Sheet 06 / 06 <span class="accent-dot">·</span> Contact</span>
+<section id="contact" class="py-20 md:py-32">
+  <div class="max-w-4xl mx-auto px-6">
+    <div class="flex justify-between items-baseline font-mono text-xs text-steel mb-12 border-b border-blueprint_line pb-4">
+      <span class="flex items-center gap-2">Sheet 06 / 06 <span class="text-accent">•</span> Contact</span>
       <span>Let's talk</span>
     </div>
 
-    <div class="sec-head">
-      <span class="sec-num">05</span>
-      <h2>Get in touch</h2>
+    <div class="reveal mb-10 text-center">
+      <h2 class="font-serif text-3xl md:text-5xl text-ink mb-4">Ready to build together.</h2>
+      <p class="text-steel">Reach out for collaborations or to discuss the Claude Campus Ambassador role.</p>
     </div>
 
-    <div class="contact-grid">
-      <a class="contact-card" href="mailto:fachriakbar.1511@gmail.com">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="1.5"/><path d="M3 6.5 12 13l9-6.5"/></svg>
-        <div><div class="cc-label">Email</div><div class="cc-value">fachriakbar.1511@gmail.com</div></div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <a href="mailto:fachriakbar.1511@gmail.com" class="reveal group flex items-center gap-4 p-5 border border-blueprint_line rounded-xl hover:border-accent hover:shadow-md transition-all bg-white">
+        <div class="w-10 h-10 rounded-full bg-blueprint/10 flex items-center justify-center text-blueprint group-hover:bg-accent/10 group-hover:text-accent transition-colors">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="1.5"/><path d="M3 6.5 12 13l9-6.5"/></svg>
+        </div>
+        <div>
+          <div class="font-mono text-xs text-steel">Email</div>
+          <div class="font-medium text-ink">fachriakbar.1511@gmail.com</div>
+        </div>
       </a>
-      <a class="contact-card" href="tel:+6289654690469">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 4h3l1.5 4.5-2 1.5a11 11 0 0 0 5.5 5.5l1.5-2L20 15v3a2 2 0 0 1-2 2A16 16 0 0 1 4 6a2 2 0 0 1 2-2Z"/></svg>
-        <div><div class="cc-label">Phone</div><div class="cc-value">+62 896 5469 0469</div></div>
+      
+      <a href="tel:+6289654690469" class="reveal group flex items-center gap-4 p-5 border border-blueprint_line rounded-xl hover:border-accent hover:shadow-md transition-all bg-white">
+        <div class="w-10 h-10 rounded-full bg-blueprint/10 flex items-center justify-center text-blueprint group-hover:bg-accent/10 group-hover:text-accent transition-colors">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 4h3l1.5 4.5-2 1.5a11 11 0 0 0 5.5 5.5l1.5-2L20 15v3a2 2 0 0 1-2 2A16 16 0 0 1 4 6a2 2 0 0 1 2-2Z"/></svg>
+        </div>
+        <div>
+          <div class="font-mono text-xs text-steel">Phone / WhatsApp</div>
+          <div class="font-medium text-ink">+62 896 5469 0469</div>
+        </div>
       </a>
-      <a class="contact-card" href="https://www.linkedin.com/in/muh-fachri-akbar" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7.5 10.5v6M7.5 7.75v.01M11.5 16.5v-3.7c0-1.3 1-2.2 2.2-2.2s2.3.9 2.3 2.3v3.6"/></svg>
-        <div><div class="cc-label">LinkedIn</div><div class="cc-value">Muh. Fachri Akbar</div></div>
+
+      <a href="https://www.linkedin.com/in/muh-fachri-akbar" target="_blank" rel="noopener" class="reveal group flex items-center gap-4 p-5 border border-blueprint_line rounded-xl hover:border-accent hover:shadow-md transition-all bg-white">
+        <div class="w-10 h-10 rounded-full bg-blueprint/10 flex items-center justify-center text-blueprint group-hover:bg-accent/10 group-hover:text-accent transition-colors">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+        </div>
+        <div>
+          <div class="font-mono text-xs text-steel">LinkedIn</div>
+          <div class="font-medium text-ink">Muh. Fachri Akbar</div>
+        </div>
       </a>
-      <a class="contact-card" href="https://instagram.com/fachriakbrr" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="3.5"/><circle cx="17" cy="7" r="0.8" fill="currentColor" stroke="none"/></svg>
-        <div><div class="cc-label">Instagram</div><div class="cc-value">@fachriakbrr</div></div>
-      </a>
-      <a class="contact-card" href="https://tiktok.com/@akbar.ph_" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14 4v10.2a3.3 3.3 0 1 1-3.3-3.3c.3 0 .6 0 .9.1"/><path d="M14 4c.3 2 1.8 3.5 3.8 3.7"/></svg>
-        <div><div class="cc-label">TikTok</div><div class="cc-value">@akbar.ph_</div></div>
-      </a>
-      <a class="contact-card" href="mailto:fachriakbar.1511@gmail.com?subject=Claude%20Campus%20Ambassador">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 12h16M13 5l7 7-7 7"/></svg>
-        <div><div class="cc-label">Application</div><div class="cc-value">Start a conversation</div></div>
+
+      <a href="https://instagram.com/fachriakbrr" target="_blank" rel="noopener" class="reveal group flex items-center gap-4 p-5 border border-blueprint_line rounded-xl hover:border-accent hover:shadow-md transition-all bg-white">
+        <div class="w-10 h-10 rounded-full bg-blueprint/10 flex items-center justify-center text-blueprint group-hover:bg-accent/10 group-hover:text-accent transition-colors">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+        </div>
+        <div>
+          <div class="font-mono text-xs text-steel">Instagram & TikTok</div>
+          <div class="font-medium text-ink">@fachriakbrr / @akbar.ph_</div>
+        </div>
       </a>
     </div>
   </div>
 </section>
 
-<footer>Muh. Fachri Akbar — Makassar, Indonesia</footer>
+<footer class="text-center py-8 font-mono text-xs text-steel border-t border-blueprint_line">
+  Muh. Fachri Akbar — Makassar, Indonesia <br> <span class="opacity-60">Designed with Architectural & AI Logic</span>
+</footer>
 
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  /* ---- Mobile Menu Toggle ---- */
+  const menuBtn = document.getElementById('mobileMenuBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  
+  menuBtn.addEventListener('click', () => {
+    mobileMenu.classList.toggle('hidden');
+    mobileMenu.classList.toggle('flex');
+  });
+
+  // Close menu on link click
+  mobileMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu.classList.add('hidden');
+      mobileMenu.classList.remove('flex');
+    });
+  });
+
+  /* ---- Scroll Reveal Logic ---- */
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const revealEls = document.querySelectorAll('.reveal');
+  
+  if(reduceMotion || !('IntersectionObserver' in window)){
+    revealEls.forEach(el => el.classList.add('is-visible'));
+    runCounters();
+  } else {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting){
+          entry.target.classList.add('is-visible');
+          if(entry.target.querySelector('.stat-num') || entry.target.classList.contains('stat-num')){
+            const counterEl = entry.target.querySelector('.stat-num') || entry.target;
+            animateCounter(counterEl);
+          }
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
+    
+    revealEls.forEach(el => io.observe(el));
+  }
+
+  /* ---- Counter Animation Logic ---- */
+  function animateCounter(el){
+    if(!el || el.dataset.done) return;
+    el.dataset.done = "1";
+    
+    const target = parseFloat(el.dataset.count);
+    const suffix = el.dataset.suffix || "";
+    const prefix = el.dataset.prefix || "";
+    const isDecimal = target % 1 !== 0;
+    const duration = 1500;
+    let start = null;
+
+    function frame(ts){
+      if(!start) start = ts;
+      const progress = Math.min((ts - start) / duration, 1);
+      // Ease out cubic
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const value = target * eased;
+      
+      const display = isDecimal ? value.toFixed(1) : Math.round(value).toLocaleString('en-US');
+      el.textContent = prefix + display + suffix;
+      
+      if(progress < 1){ 
+        requestAnimationFrame(frame); 
+      } else {
+        const finalDisplay = isDecimal ? target.toFixed(1) : target.toLocaleString('en-US');
+        el.textContent = prefix + finalDisplay + suffix;
+      }
+    }
+    requestAnimationFrame(frame);
+  }
+
+  function runCounters(){
+    document.querySelectorAll('.stat-num').forEach(animateCounter);
+  }
+
+  /* ---- Hero CAD Crosshair Logic ---- */
+  const hero = document.getElementById('hero-section');
+  const crosshair = document.getElementById('heroCrosshair');
+  const coordLabel = document.getElementById('heroCoord');
+  const pointerFine = window.matchMedia('(pointer: fine)').matches;
+
+  if(hero && crosshair && pointerFine && !reduceMotion){
+    hero.addEventListener('mousemove', (e) => {
+      const rect = hero.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      
+      crosshair.style.transform = `translate(${x}px, ${y}px)`;
+      crosshair.classList.add('opacity-100');
+      crosshair.classList.remove('opacity-0');
+      
+      coordLabel.textContent = 'X:' + Math.round(x).toString().padStart(3,'0') + 
+                               ' Y:' + Math.round(y).toString().padStart(3,'0');
+    });
+    
+    hero.addEventListener('mouseleave', () => {
+      crosshair.classList.remove('opacity-100');
+      crosshair.classList.add('opacity-0');
+    });
+  }
+});
+</script>
 </body>
 </html>
